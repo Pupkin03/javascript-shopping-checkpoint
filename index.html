@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Shopping Cart</title>
+</head>
+<body>
+    <div id="shoppingCart">
+        <h2>Shopping Cart</h2>
+        <div id="items"></div>
+        <button onclick="addItem()">Add Item</button>
+    </div>
+
+    <script>
+        let items = [];
+
+        function addItem() {
+            const newItem = {
+                name: "Item " + (items.length + 1),
+                quantity: 1,
+                price: Math.floor(Math.random() * 100) + 1, // Random price for demonstration
+                liked: false
+            };
+            items.push(newItem);
+            renderItems();
+        }
+
+        function renderItems() {
+            const itemsContainer = document.getElementById("items");
+            itemsContainer.innerHTML = "";
+
+            items.forEach((item, index) => {
+                const itemDiv = document.createElement("div");
+                itemDiv.innerHTML = `
+                    <div>
+                        <span>${item.name} - $${item.price} - Quantity: ${item.quantity}</span>
+                        <button onclick="increaseQuantity(${index})">+</button>
+                        <button onclick="decreaseQuantity(${index})">-</button>
+                        <button onclick="toggleLike(${index})">${item.liked ? 'Unlike' : 'Like'}</button>
+                        <button onclick="deleteItem(${index})">Delete</button>
+                    </div>
+                `;
+                itemsContainer.appendChild(itemDiv);
+            });
+        }
+
+        function increaseQuantity(index) {
+            items[index].quantity++;
+            items[index].price = items[index].quantity * items[index].price;
+            renderItems();
+        }
+
+        function decreaseQuantity(index) {
+            if (items[index].quantity > 1) {
+                items[index].quantity--;
+                items[index].price = items[index].quantity * items[index].price;
+            }
+            renderItems();
+        }
+
+        function toggleLike(index) {
+            items[index].liked = !items[index].liked;
+            renderItems();
+        }
+
+        function deleteItem(index) {
+            items.splice(index, 1);
+            renderItems();
+        }
+
+        renderItems();
+    </script>
+</body>
+</html>
